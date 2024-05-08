@@ -1,3 +1,12 @@
+:root {
+  --black-blue: #04141C;
+  --dark-blue: #001E2B;
+  --white: #ffffff;
+  --info: #016BF8;
+  --info-hover: #00357B;
+  --light: #828282;
+}
+
 * {
   margin: 0;
   padding: 0;

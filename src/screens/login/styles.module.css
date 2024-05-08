@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #04141C;
+  background-color: var(--black-blue);
   height: 100vh;
 }
 
@@ -13,19 +13,19 @@
   flex-direction: column;
 
   padding: 32px;
-  background-color: #001E2B;
+  background-color: var(--dark-blue);
   width: 380px;
   border-radius: 8px;
 }
 
 .content h1 {
-  color: #ffffff;
+  color: var(--white);
   font-size: 24px;
   margin-bottom: 40px;
 }
 
 .content p {
-  color: #ffffff;
+  color: var(--white);
   font-weight: 300;
   font-size: 12px;
   text-align: center;
