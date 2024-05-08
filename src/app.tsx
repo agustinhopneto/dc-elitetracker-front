@@ -1,9 +1,9 @@
-function App() {
+import { Login } from './screens/login';
+
+export function App() {
   return (
     <>
-      <h1>Elite Tracker</h1>
+      <Login />
     </>
   );
 }
-
-export default App;
