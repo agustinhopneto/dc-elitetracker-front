@@ -23,6 +23,7 @@
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/triple-slash-reference": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
     "import-helpers/order-imports": [
       "warn",
       {
