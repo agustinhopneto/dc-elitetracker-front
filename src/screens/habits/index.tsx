@@ -12,7 +12,12 @@ export function Habits() {
         <div className={styles.content}>
           <header>
             <h1>Hábitos Diários</h1>
-            <span>Hoje, 27 de Fevereiro</span>
+            <span>
+              {`Hoje, ${new Intl.DateTimeFormat('pt-BR', {
+                dateStyle: 'long',
+                timeZone: 'America/Sao_Paulo',
+              }).format(new Date())}`}
+            </span>
           </header>
           <div className={styles.input}>
             <input placeholder="Digite aqui um novo hábito" type="text" />
