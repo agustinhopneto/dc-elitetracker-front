@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--dark-blue);
+}
+
+.content {
+  padding: 20px;
+  width: 60%;
+  border-right: 1px solid var(--light);
+  height: calc(100% - 40px);
+}
