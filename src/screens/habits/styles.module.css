@@ -6,7 +6,8 @@
 .content {
   padding: 20px;
   width: 60%;
-  border-right: 1px solid var(--light)
+  border-right: 1px solid var(--light);
+  height: calc(100% - 40px);
 }
 
 .content header h1 {
