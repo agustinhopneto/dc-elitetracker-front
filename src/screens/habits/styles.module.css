@@ -1,11 +1,11 @@
 .container {
-  padding: 20px;
   height: 100vh;
   background-color: var(--dark-blue);
 }
 
 .content {
-  width: 75%;
+  padding: 20px;
+  width: 60%;
   border-right: 1px solid var(--light)
 }
 
@@ -20,4 +20,38 @@
   font-size: 14px;
   font-weight: 400;
   color: var(--white)
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--white);
+  border-radius: 4px;
+  height: 36px;
+  padding: 0 10px;
+  margin-top: 40px;
+}
+
+.input input {
+  height: 36px;
+  width: 100%;
+  font-size: 16px;
+  background-color: transparent;
+  color: var(--white);
+}
+
+.input input::placeholder {
+  color: var(--light);
+}
+
+.input svg {
+  height: 24px;
+  width: 24px;
+  fill: var(--white);
+  cursor: pointer;
+  transition: fill 100ms;
+}
+
+.input svg:hover {
+  fill: var(--info);
 }

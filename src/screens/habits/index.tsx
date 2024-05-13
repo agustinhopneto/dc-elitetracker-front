@@ -11,7 +11,7 @@ export function Habits() {
           <span>Hoje, 27 de Fevereiro</span>
         </header>
         <div className={styles.input}>
-          <input type="text" />
+          <input placeholder="Digite aqui um novo hábito" type="text" />
           <PaperPlaneRight />
         </div>
         <div className={styles.habit}>
