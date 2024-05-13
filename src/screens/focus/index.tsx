@@ -1,6 +1,7 @@
 import { Plus } from '@phosphor-icons/react';
 import { useRef } from 'react';
 
+import { Button } from '../../components/button';
 import { Header } from '../../components/header';
 import styles from './styles.module.css';
 
@@ -50,6 +51,17 @@ export function Focus() {
               disabled
             />
           </div>
+        </div>
+
+        <div className={styles.timer}>
+          <span>25:00</span>
+        </div>
+
+        <div className={styles['button-group']}>
+          <Button disabled>Começar</Button>
+          <Button>Iniciar Descanso</Button>
+          <Button>Retomar</Button>
+          <Button variant="error">Cancelar</Button>
         </div>
       </div>
     </div>
