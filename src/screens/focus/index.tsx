@@ -5,6 +5,7 @@ import { useTimer } from 'react-timer-hook';
 
 import { Button } from '../../components/button';
 import { Header } from '../../components/header';
+import { api } from '../../services/api';
 import styles from './styles.module.css';
 
 type Timers = {
@@ -17,6 +18,12 @@ enum TimerState {
   FOCUS = 'FOCUS',
   REST = 'REST',
 }
+
+const timerStateTitle = {
+  [TimerState.PAUSED]: 'Pausado',
+  [TimerState.FOCUS]: 'Em foco',
+  [TimerState.REST]: 'Em descanso',
+};
 
 export function Focus() {
   const focusInput = useRef<HTMLInputElement>(null);
@@ -32,6 +39,8 @@ export function Focus() {
   }
 
   function handleStart() {
+    restTimer.pause();
+
     const now = new Date();
 
     focusTimer.restart(addSeconds(now, timers.focus * 60));
@@ -39,8 +48,10 @@ export function Focus() {
     setTimeFrom(now);
   }
 
-  function handleEnd() {
-    console.log({
+  async function handleEnd() {
+    focusTimer.pause();
+
+    await api.post('/focus-time', {
       timeFrom: timeFrom?.toISOString(),
       timeTo: new Date().toISOString(),
     });
@@ -50,11 +61,15 @@ export function Focus() {
 
   const focusTimer = useTimer({
     expiryTimestamp: new Date(),
-    onExpire() {
+    async onExpire() {
       if (timerState !== TimerState.PAUSED) {
-        handleEnd();
+        await handleEnd();
       }
     },
+  });
+
+  const restTimer = useTimer({
+    expiryTimestamp: new Date(),
   });
 
   function handleAddMinutes(type: 'focus' | 'rest') {
@@ -114,8 +129,12 @@ export function Focus() {
     setTimerState(TimerState.FOCUS);
   }
 
-  function handleRest() {
-    handleEnd();
+  async function handleRest() {
+    await handleEnd();
+
+    const now = new Date();
+
+    restTimer.restart(addSeconds(now, timers.rest * 60));
 
     setTimerState(TimerState.REST);
   }
@@ -153,12 +172,17 @@ export function Focus() {
         </div>
 
         <div className={styles.timer}>
+          <strong>{timerStateTitle[timerState]}</strong>
           {timerState === TimerState.PAUSED && (
             <span>{`${String(timers.focus).padStart(2, '0')}:00`}</span>
           )}
 
           {timerState === TimerState.FOCUS && (
             <span>{`${String(focusTimer.minutes).padStart(2, '0')}:${String(focusTimer.seconds).padStart(2, '0')}`}</span>
+          )}
+
+          {timerState === TimerState.REST && (
+            <span>{`${String(restTimer.minutes).padStart(2, '0')}:${String(restTimer.seconds).padStart(2, '0')}`}</span>
           )}
         </div>
 

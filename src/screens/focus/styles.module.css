@@ -59,6 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
   max-width: 364px;
   max-height: 364px;
@@ -70,6 +71,10 @@
   margin: 0 auto;
   margin-top: 80px;
   border-radius: 999px;
+}
+
+.timer strong {
+  color: var(--white);
 }
 
 .timer span {
