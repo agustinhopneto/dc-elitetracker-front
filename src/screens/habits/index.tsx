@@ -1,3 +1,4 @@
+import { Calendar } from '@mantine/dates';
 import { PaperPlaneRight, Trash } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
@@ -91,6 +92,9 @@ export function Habits() {
         <div className={styles['info-container']}>
           <Info value="23/31" label="Dias concluídos" />
           <Info value="78%" label="Porcentagem" />
+        </div>
+        <div className={styles['calendar-container']}>
+          <Calendar />
         </div>
       </div>
     </div>
