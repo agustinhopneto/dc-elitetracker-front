@@ -1,5 +1,6 @@
 import { Calendar } from '@mantine/dates';
 import { PaperPlaneRight, Trash } from '@phosphor-icons/react';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 
@@ -17,10 +18,23 @@ type Habit = {
   updatedAt: string;
 };
 
+type HabitMetrics = {
+  _id: string;
+  name: string;
+  completedDates: string[];
+};
+
 export function Habits() {
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [metrics, setMetrics] = useState<HabitMetrics>({} as HabitMetrics);
+  const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
   const nameInput = useRef<HTMLInputElement>(null);
   const today = dayjs().startOf('day').toISOString();
+
+  async function handleSelectHabit(habit: Habit) {
+    setSelectedHabit(habit);
+    console.log(habit);
+  }
 
   async function loadHabits() {
     const { data } = await api.get<Habit[]>('/habits');
@@ -72,8 +86,16 @@ export function Habits() {
         </div>
         <div className={styles.habits}>
           {habits.map((item) => (
-            <div key={item._id} className={styles.habit}>
-              <p>{item.name}</p>
+            <div
+              key={item._id}
+              className={clsx(
+                styles.habit,
+                item._id === selectedHabit?._id && styles['habit-active'],
+              )}
+            >
+              <p onClick={async () => await handleSelectHabit(item)}>
+                {item.name}
+              </p>
               <div>
                 <input
                   type="checkbox"
