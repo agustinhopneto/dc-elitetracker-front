@@ -50,14 +50,16 @@ export function Habits() {
     };
   }, [metrics]);
 
-  async function handleSelectHabit(habit: Habit) {
+  async function handleSelectHabit(habit: Habit, currentMonth?: Date) {
     setSelectedHabit(habit);
 
     const { data } = await api.get<HabitMetrics>(
       `/habits/${habit._id}/metrics`,
       {
         params: {
-          date: today.toISOString(),
+          date: currentMonth
+            ? currentMonth.toISOString()
+            : today.startOf('month').toISOString(),
         },
       },
     );
@@ -99,6 +101,10 @@ export function Habits() {
     setSelectedHabit(null);
 
     await loadHabits();
+  }
+
+  async function handleSelectMonth(date: Date) {
+    await handleSelectHabit(selectedHabit!, date);
   }
 
   useEffect(() => {
@@ -160,6 +166,9 @@ export function Habits() {
           <div className={styles['calendar-container']}>
             <Calendar
               static
+              onMonthSelect={handleSelectMonth}
+              onNextMonth={handleSelectMonth}
+              onPreviousMonth={handleSelectMonth}
               renderDay={(date) => {
                 const day = date.getDate();
                 const isSameDate = metrics?.completedDates?.some((item) =>
