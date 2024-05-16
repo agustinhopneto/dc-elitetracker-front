@@ -1,3 +1,4 @@
+import { Indicator } from '@mantine/core';
 import { Calendar } from '@mantine/dates';
 import { PaperPlaneRight, Trash } from '@phosphor-icons/react';
 import clsx from 'clsx';
@@ -157,7 +158,25 @@ export function Habits() {
             />
           </div>
           <div className={styles['calendar-container']}>
-            <Calendar />
+            <Calendar
+              static
+              renderDay={(date) => {
+                const day = date.getDate();
+                const isSameDate = metrics?.completedDates?.some((item) =>
+                  dayjs(item).isSame(dayjs(date)),
+                );
+                return (
+                  <Indicator
+                    size={8}
+                    color="var(--info)"
+                    offset={-2}
+                    disabled={!isSameDate}
+                  >
+                    <div>{day}</div>
+                  </Indicator>
+                );
+              }}
+            />
           </div>
         </div>
       )}
