@@ -51,7 +51,17 @@ export function Habits() {
 
   async function handleSelectHabit(habit: Habit) {
     setSelectedHabit(habit);
-    console.log(habit);
+
+    const { data } = await api.get<HabitMetrics>(
+      `/habits/${habit._id}/metrics`,
+      {
+        params: {
+          date: today.toISOString(),
+        },
+      },
+    );
+
+    setMetrics(data);
   }
 
   async function loadHabits() {
@@ -74,14 +84,18 @@ export function Habits() {
     }
   }
 
-  async function handleToggle(id: string) {
-    await api.patch(`/habits/${id}/toggle`);
+  async function handleToggle(habit: Habit) {
+    await api.patch(`/habits/${habit._id}/toggle`);
 
     await loadHabits();
+    await handleSelectHabit(habit);
   }
 
   async function handleRemove(id: string) {
     await api.delete(`/habits/${id}`);
+
+    setMetrics({} as HabitMetrics);
+    setSelectedHabit(null);
 
     await loadHabits();
   }
@@ -120,7 +134,7 @@ export function Habits() {
                   checked={item.completedDates.some(
                     (item) => item === today.toISOString(),
                   )}
-                  onChange={async () => await handleToggle(item._id)}
+                  onChange={async () => await handleToggle(item)}
                 />
                 <Trash onClick={async () => await handleRemove(item._id)} />
               </div>
