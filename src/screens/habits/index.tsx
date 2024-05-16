@@ -2,7 +2,7 @@ import { Calendar } from '@mantine/dates';
 import { PaperPlaneRight, Trash } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Header } from '../../components/header';
 import { Info } from '../../components/info';
@@ -29,7 +29,25 @@ export function Habits() {
   const [metrics, setMetrics] = useState<HabitMetrics>({} as HabitMetrics);
   const [selectedHabit, setSelectedHabit] = useState<Habit | null>(null);
   const nameInput = useRef<HTMLInputElement>(null);
-  const today = dayjs().startOf('day').toISOString();
+  const today = dayjs().startOf('day');
+
+  const metricsInfo = useMemo(() => {
+    const numberOfMonthDays = today.endOf('month').get('date');
+    const numberOfDays = metrics?.completedDates
+      ? metrics?.completedDates?.length
+      : 0;
+
+    const completedDatesPerMonth = `${numberOfDays}/${numberOfMonthDays}`;
+
+    const completedMonthPercent = `${Math.round(
+      (numberOfDays / numberOfMonthDays) * 100,
+    )}%`;
+
+    return {
+      completedDatesPerMonth,
+      completedMonthPercent,
+    };
+  }, [metrics]);
 
   async function handleSelectHabit(habit: Habit) {
     setSelectedHabit(habit);
@@ -99,7 +117,9 @@ export function Habits() {
               <div>
                 <input
                   type="checkbox"
-                  checked={item.completedDates.some((item) => item === today)}
+                  checked={item.completedDates.some(
+                    (item) => item === today.toISOString(),
+                  )}
                   onChange={async () => await handleToggle(item._id)}
                 />
                 <Trash onClick={async () => await handleRemove(item._id)} />
@@ -108,17 +128,25 @@ export function Habits() {
           ))}
         </div>
       </div>
-      <div className={styles.metrics}>
-        <h2>Estudar Espanhol</h2>
+      {selectedHabit && (
+        <div className={styles.metrics}>
+          <h2>{selectedHabit.name}</h2>
 
-        <div className={styles['info-container']}>
-          <Info value="23/31" label="Dias concluídos" />
-          <Info value="78%" label="Porcentagem" />
+          <div className={styles['info-container']}>
+            <Info
+              value={metricsInfo.completedDatesPerMonth}
+              label="Dias concluídos"
+            />
+            <Info
+              value={metricsInfo.completedMonthPercent}
+              label="Porcentagem"
+            />
+          </div>
+          <div className={styles['calendar-container']}>
+            <Calendar />
+          </div>
         </div>
-        <div className={styles['calendar-container']}>
-          <Calendar />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
