@@ -1,16 +1,33 @@
+import { Indicator } from '@mantine/core';
+import { Calendar } from '@mantine/dates';
 import { Plus } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTimer } from 'react-timer-hook';
 
 import { Button } from '../../components/button';
 import { Header } from '../../components/header';
+import { Info } from '../../components/info';
 import { api } from '../../services/api';
 import styles from './styles.module.css';
 
 type Timers = {
   focus: number;
   rest: number;
+};
+
+type FocusMetrics = {
+  _id: [number, number, number];
+  count: number;
+};
+
+type FocusTime = {
+  _id: string;
+  timeFrom: string;
+  timeTo: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 enum TimerState {
@@ -31,6 +48,12 @@ export function Focus() {
   const [timers, setTimers] = useState<Timers>({ focus: 0, rest: 0 });
   const [timerState, setTimerState] = useState<TimerState>(TimerState.PAUSED);
   const [timeFrom, setTimeFrom] = useState<Date | null>(null);
+  const [focusMetrics, setFocusMetrics] = useState<FocusMetrics>(
+    {} as FocusMetrics,
+  );
+  const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(
+    dayjs().startOf('month'),
+  );
 
   function addSeconds(date: Date, seconds: number) {
     const time = dayjs(date).add(seconds, 'seconds');
@@ -145,6 +168,26 @@ export function Focus() {
     setTimerState(TimerState.FOCUS);
   }
 
+  async function loadFocusMetrics(currentMonth: string) {
+    const { data } = await api.get<FocusMetrics[]>('/focus-time/metrics', {
+      params: {
+        date: currentMonth,
+      },
+    });
+
+    const [metrics] = data;
+
+    setFocusMetrics(metrics || ({} as FocusMetrics));
+  }
+
+  async function handleSelectMonth(date: Date) {
+    setCurrentMonth(dayjs(date));
+  }
+
+  useEffect(() => {
+    loadFocusMetrics(currentMonth.toISOString());
+  }, [currentMonth]);
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -205,6 +248,37 @@ export function Focus() {
           <Button onClick={handleCancel} variant="error">
             Cancelar
           </Button>
+        </div>
+      </div>
+      <div className={styles.metrics}>
+        <h2>Estatísticas</h2>
+
+        <div className={styles['info-container']}>
+          <Info value={String(focusMetrics.count || 0)} label="Ciclos totais" />
+          <Info value="120 minutos" label="Tempo total de foco" />
+        </div>
+        <div className={styles['calendar-container']}>
+          <Calendar
+            onMonthSelect={handleSelectMonth}
+            onNextMonth={handleSelectMonth}
+            onPreviousMonth={handleSelectMonth}
+            renderDay={(date) => {
+              const day = date.getDate();
+              // const isSameDate = metrics?.completedDates?.some((item) =>
+              //   dayjs(item).isSame(dayjs(date)),
+              // );
+              return (
+                <Indicator
+                  size={8}
+                  color="var(--info)"
+                  offset={-2}
+                  // disabled={!isSameDate}
+                >
+                  <div>{day}</div>
+                </Indicator>
+              );
+            }}
+          />
         </div>
       </div>
     </div>
