@@ -24,7 +24,7 @@ type UserProviverProps = {
   children: ReactNode;
 };
 
-const localStorageKey = `${import.meta.env.VITE_LOCALSTORAGE_KEY}:userData`;
+export const userLocalStorageKey = `${import.meta.env.VITE_LOCALSTORAGE_KEY}:userData`;
 
 const UserContext = createContext<UserContextProps>({} as UserContextProps);
 
@@ -34,7 +34,7 @@ export function UserProvider({ children }: UserProviverProps) {
   function putUserData(data: UserData) {
     setUserData(data);
 
-    localStorage.setItem(localStorageKey, JSON.stringify(data));
+    localStorage.setItem(userLocalStorageKey, JSON.stringify(data));
   }
 
   async function getUserInfo(githubCode: string) {
@@ -48,7 +48,7 @@ export function UserProvider({ children }: UserProviverProps) {
   }
 
   async function loadUserData() {
-    const localData = localStorage.getItem(localStorageKey);
+    const localData = localStorage.getItem(userLocalStorageKey);
 
     if (localData) {
       setUserData(JSON.parse(localData) as UserData);
