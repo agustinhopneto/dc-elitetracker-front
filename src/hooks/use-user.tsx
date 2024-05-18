@@ -1,4 +1,10 @@
-import { type ReactNode, createContext, useState, useContext } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 
 import { api } from '../services/api';
 
@@ -18,10 +24,18 @@ type UserProviverProps = {
   children: ReactNode;
 };
 
+const localStorageKey = `${import.meta.env.VITE_LOCALSTORAGE_KEY}:userData`;
+
 const UserContext = createContext<UserContextProps>({} as UserContextProps);
 
 export function UserProvider({ children }: UserProviverProps) {
   const [userData, setUserData] = useState<UserData>({} as UserData);
+
+  function putUserData(data: UserData) {
+    setUserData(data);
+
+    localStorage.setItem(localStorageKey, JSON.stringify(data));
+  }
 
   async function getUserInfo(githubCode: string) {
     const { data } = await api.get<UserData>('/auth/callback', {
@@ -30,8 +44,20 @@ export function UserProvider({ children }: UserProviverProps) {
       },
     });
 
-    setUserData(data);
+    putUserData(data);
   }
+
+  async function loadUserData() {
+    const localData = localStorage.getItem(localStorageKey);
+
+    if (localData) {
+      setUserData(JSON.parse(localData) as UserData);
+    }
+  }
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
 
   return (
     <UserContext.Provider value={{ userData, getUserInfo }}>
