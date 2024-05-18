@@ -16,7 +16,7 @@ export type UserData = {
 };
 
 type UserContextProps = {
-  getUserInfo: (githubCode: string) => void;
+  getUserInfo: (githubCode: string) => Promise<void>;
   userData: UserData;
 };
 
