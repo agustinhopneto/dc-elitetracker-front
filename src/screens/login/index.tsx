@@ -1,13 +1,10 @@
 import { GithubLogo } from '@phosphor-icons/react';
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../components/button';
 import styles from './styles.module.css';
 
 export function Login() {
-  // const navigate = useNavigate();
-
   async function handleAuth() {
     const { data } = await axios.get('http://localhost:4000/auth');
 
