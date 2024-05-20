@@ -33,8 +33,9 @@
 
 .disabled {
   background-color: var(--light);
+  cursor: not-allowed;
 }
 
 .disabled:hover {
-  background-color: var(--neutral);
+  background-color: var(--light);
 }
