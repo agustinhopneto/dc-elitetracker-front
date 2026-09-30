@@ -2,7 +2,7 @@
 
 # 🏆 Elite Tracker
 
-**Construa hábitos consistentes e mantenha o foco. Um tracker de hábitos diários com timer Pomodoro e estatísticas mensais.**
+**Build consistent habits and stay focused. A daily habit tracker with a Pomodoro timer and monthly statistics.**
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -11,141 +11,143 @@
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 ![CSS Modules](https://img.shields.io/badge/CSS_Modules-000000?style=for-the-badge&logo=cssmodules&logoColor=white)
 
-[Sobre](#-sobre) •
-[Telas](#-telas) •
-[Como rodar](#-como-rodar) •
-[Estrutura](#-estrutura) •
-[Fluxo de login](#-fluxo-de-login) •
+[About](#-about) •
+[Screens](#-screens) •
+[Getting started](#-getting-started) •
+[Structure](#-structure) •
+[Sign-in flow](#-sign-in-flow) •
 [Backend](#-backend)
 
 </div>
 
 ---
 
-## 📖 Sobre
+## 📖 About
 
-O **Elite Tracker** é uma aplicação web para quem quer evoluir com constância. Com ele você:
+**Elite Tracker** is a web app for people who want to improve with consistency. With it you can:
 
-- ✅ cadastra **hábitos diários** e marca o que já cumpriu hoje;
-- 📅 acompanha no **calendário** os dias em que cada hábito foi concluído, com a porcentagem do mês;
-- ⏱️ usa um **timer de foco e descanso** (estilo Pomodoro) que registra cada ciclo;
-- 📊 vê **estatísticas** de ciclos totais e tempo total de foco por dia.
+- ✅ create **daily habits** and check off what you’ve done today;
+- 📅 see on a **calendar** the days each habit was completed, along with the month’s completion rate;
+- ⏱️ use a **focus and rest timer** (Pomodoro style) that records every cycle;
+- 📊 view **statistics** on total cycles and total focus time per day.
 
-Tudo isso com **login via GitHub**, sem precisar criar conta.
+All with **GitHub sign-in**, no account needed.
 
-## 🖼️ Telas
+> 🇧🇷 The app’s interface is in Brazilian Portuguese.
 
-| Tela | Rota | O que tem |
+## 🖼️ Screens
+
+| Screen | Route | What’s in it |
 |---|---|---|
-| 🔑 **Login** | `/entrar` | Botão "Entrar com GitHub" |
-| 🔄 **Autenticação** | `/autenticacao` | Recebe o `code` do GitHub e finaliza o login |
-| ✅ **Hábitos Diários** | `/` | Lista de hábitos, checkbox do dia, exclusão, calendário e métricas do hábito selecionado |
-| ⏱️ **Tempo de Foco** | `/foco` | Configuração de foco/descanso (+5 min), timer, calendário e estatísticas |
+| 🔑 **Sign in** | `/entrar` | "Sign in with GitHub" button |
+| 🔄 **Authentication** | `/autenticacao` | Receives the GitHub `code` and completes sign-in |
+| ✅ **Daily Habits** | `/` | Habit list, today’s checkbox, delete, calendar and metrics for the selected habit |
+| ⏱️ **Focus Time** | `/foco` | Focus/rest setup (+5 min), timer, calendar and statistics |
 
-> As rotas `/` e `/foco` são **privadas**: sem usuário logado, você é redirecionado para `/entrar`.
+> The `/` and `/foco` routes are **private**: without a signed-in user you are redirected to `/entrar`.
 
-### ⏱️ Como funciona o timer
+### ⏱️ How the timer works
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Pausado
-    Pausado --> EmFoco: Começar
-    EmFoco --> EmDescanso: Iniciar Descanso (salva o ciclo)
-    EmFoco --> EmDescanso: Tempo esgotado (salva o ciclo)
-    EmDescanso --> EmFoco: Retomar
-    EmFoco --> Pausado: Cancelar
-    EmDescanso --> Pausado: Cancelar
+    [*] --> Paused
+    Paused --> Focusing: Start
+    Focusing --> Resting: Start Rest (saves the cycle)
+    Focusing --> Resting: Time's up (saves the cycle)
+    Resting --> Focusing: Resume
+    Focusing --> Paused: Cancel
+    Resting --> Paused: Cancel
 ```
 
-Cada ciclo de foco concluído é enviado para a API (`POST /focus-time`) e aparece marcado no calendário.
+Each completed focus cycle is sent to the API (`POST /focus-time`) and shows up marked on the calendar.
 
-## 🚀 Como rodar
+## 🚀 Getting started
 
-### Pré-requisitos
+### Prerequisites
 
 - [Node.js](https://nodejs.org/) 18+
-- A **[Elite Tracker API](https://github.com/agustinhopneto/dc-elitetracker-api)** rodando (por padrão em `http://localhost:4000`)
+- The **[Elite Tracker API](https://github.com/agustinhopneto/dc-elitetracker-api)** running (by default at `http://localhost:4000`)
 
-### Passo a passo
+### Step by step
 
 ```bash
-# 1. Clone o repositório
+# 1. Clone the repository
 git clone https://github.com/agustinhopneto/dc-elitetracker-front.git
 cd dc-elitetracker-front
 
-# 2. Instale as dependências
+# 2. Install the dependencies
 npm install
 
-# 3. Configure as variáveis de ambiente (arquivo .env na raiz)
+# 3. Set up the environment variables (.env file at the project root)
 
-# 4. Rode em modo desenvolvimento
+# 4. Run in development mode
 npm run dev
 ```
 
-Acesse **http://localhost:5173** 🎉
+Open **http://localhost:5173** 🎉
 
-### Variáveis de ambiente
+### Environment variables
 
-| Variável | Descrição | Exemplo |
+| Variable | Description | Example |
 |---|---|---|
-| `VITE_API_URL` | URL base da API | `http://localhost:4000` |
-| `VITE_LOCALSTORAGE_KEY` | Prefixo da chave usada no `localStorage` | `elitetracker` |
+| `VITE_API_URL` | API base URL | `http://localhost:4000` |
+| `VITE_LOCALSTORAGE_KEY` | Prefix of the key used in `localStorage` | `elitetracker` |
 
 ### Scripts
 
-| Comando | Descrição |
+| Command | Description |
 |---|---|
-| `npm run dev` | Servidor de desenvolvimento (Vite) |
-| `npm run build` | Checagem de tipos + build de produção |
-| `npm run preview` | Pré-visualiza o build de produção |
+| `npm run dev` | Development server (Vite) |
+| `npm run build` | Type check + production build |
+| `npm run preview` | Preview the production build |
 
-## 🗂️ Estrutura
+## 🗂️ Structure
 
 ```
 src/
-├── components/        # Componentes reutilizáveis
-│   ├── app-container/ #   Layout base
-│   ├── button/        #   Botão (variantes info/error)
-│   ├── header/        #   Cabeçalho com título e data
-│   ├── info/          #   Cartão de métrica
-│   └── sidebar/       #   Avatar, navegação e logout
+├── components/        # Reusable components
+│   ├── app-container/ #   Base layout
+│   ├── button/        #   Button (info/error variants)
+│   ├── header/        #   Header with title and date
+│   ├── info/          #   Metric card
+│   └── sidebar/       #   Avatar, navigation and sign-out
 ├── hooks/
-│   └── use-user.tsx   # Contexto de autenticação (login/logout/localStorage)
+│   └── use-user.tsx   # Auth context (sign-in/sign-out/localStorage)
 ├── routes/
-│   ├── index.tsx      # Definição das rotas
+│   ├── index.tsx      # Route definitions
 │   └── private-route.tsx
-├── screens/           # Telas: login, auth, habits, focus
+├── screens/           # Screens: login, auth, habits, focus
 ├── services/
-│   └── api.ts         # Axios com interceptor que injeta o Bearer token
+│   └── api.ts         # Axios with an interceptor that injects the Bearer token
 ├── styles/
-│   └── global.css     # Tokens de cor e reset
+│   └── global.css     # Color tokens and reset
 ├── app.tsx
 └── main.tsx
 ```
 
-## 🔐 Fluxo de login
+## 🔐 Sign-in flow
 
 ```mermaid
 sequenceDiagram
-    actor U as Usuário
+    actor U as User
     participant F as Frontend
     participant A as API
     participant G as GitHub
 
-    U->>F: Clica em "Entrar com GitHub"
+    U->>F: Clicks "Sign in with GitHub"
     F->>A: GET /auth
     A-->>F: { redirectUrl }
-    F->>G: Redireciona para o OAuth
+    F->>G: Redirects to OAuth
     G-->>F: /autenticacao?code=...
     F->>A: GET /auth/callback?code=...
-    A->>G: Troca code por access_token + busca usuário
+    A->>G: Exchanges code for access_token + fetches user
     A-->>F: { id, name, avatarUrl, token }
-    F->>F: Salva no localStorage e redireciona para /
+    F->>F: Saves to localStorage and redirects to /
 ```
 
-## 🎨 Paleta
+## 🎨 Palette
 
-| Token | Cor |
+| Token | Color |
 |---|---|
 | `--black-blue` | ![#04141C](https://placehold.co/15x15/04141C/04141C.png) `#04141C` |
 | `--dark-blue` | ![#001E2B](https://placehold.co/15x15/001E2B/001E2B.png) `#001E2B` |
@@ -153,20 +155,20 @@ sequenceDiagram
 | `--error` | ![#DB3030](https://placehold.co/15x15/DB3030/DB3030.png) `#DB3030` |
 | `--light` | ![#828282](https://placehold.co/15x15/828282/828282.png) `#828282` |
 
-Fonte: **[Lexend](https://fonts.google.com/specimen/Lexend)**
+Font: **[Lexend](https://fonts.google.com/specimen/Lexend)**
 
 ## 🔗 Backend
 
-A API que alimenta esta aplicação está em
+The API that powers this app lives at
 👉 **[dc-elitetracker-api](https://github.com/agustinhopneto/dc-elitetracker-api)**
 
-## 🛠️ Tecnologias
+## 🛠️ Tech stack
 
 - **[React 18](https://react.dev/)** + **[Vite](https://vitejs.dev/)**
-- **[Mantine](https://mantine.dev/)** (`@mantine/core` e `@mantine/dates`): calendário e indicadores
-- **[React Router](https://reactrouter.com/)**: rotas públicas e privadas
-- **[react-timer-hook](https://github.com/amrlabib/react-timer-hook)**: timer de foco/descanso
-- **[Phosphor Icons](https://phosphoricons.com/)**: ícones
+- **[Mantine](https://mantine.dev/)** (`@mantine/core` and `@mantine/dates`): calendar and indicators
+- **[React Router](https://reactrouter.com/)**: public and private routes
+- **[react-timer-hook](https://github.com/amrlabib/react-timer-hook)**: focus/rest timer
+- **[Phosphor Icons](https://phosphoricons.com/)**: icons
 - **[Axios](https://axios-http.com/)** + **[Day.js](https://day.js.org/)** + **[clsx](https://github.com/lukeed/clsx)**
 - **CSS Modules** + **PostCSS**
 - **ESLint + Prettier**
@@ -175,6 +177,6 @@ A API que alimenta esta aplicação está em
 
 <div align="center">
 
-Feito com 💙 por **[Agustinho Neto](https://github.com/agustinhopneto)**
+Made with 💙 by **[Agustinho Neto](https://github.com/agustinhopneto)**
 
 </div>
